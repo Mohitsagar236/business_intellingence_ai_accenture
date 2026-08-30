@@ -1,0 +1,417 @@
+<title>BusinessIntelligence.ai Design Document</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --paper:#FAF9FC; --paper-raised:#F1EDF7; --paper-sunk:#EFEAF6;
+    --ink:#1C1524; --ink-soft:#4A4152; --mute:#6B6478;
+    --line:#E1DCEA; --line-strong:#CFC7DE;
+    --accent:#6D28D9; --accent-soft:#EDE6FB; --accent-ink:#4C1D95; --accent-line:#C9B8F0;
+    --ok:#1F7A57; --ok-soft:#E4F3EC;
+    --warn:#966009; --warn-soft:#F7ECD8;
+    --mono-bg:#F4F1F9;
+    --shadow: 0 1px 2px rgba(28,21,36,.06), 0 8px 24px -12px rgba(28,21,36,.12);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#17121D; --paper-raised:#1E1826; --paper-sunk:#1A1520;
+      --ink:#EDE8F5; --ink-soft:#C6BFD6; --mute:#948AA3;
+      --line:#322A3D; --line-strong:#40364E;
+      --accent:#B49AF7; --accent-soft:#2A2136; --accent-ink:#E1D5FB; --accent-line:#4B3E60;
+      --ok:#5BD9A0; --ok-soft:#17281F;
+      --warn:#F0C069; --warn-soft:#2B2416;
+      --mono-bg:#1E1826;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#17121D; --paper-raised:#1E1826; --paper-sunk:#1A1520;
+    --ink:#EDE8F5; --ink-soft:#C6BFD6; --mute:#948AA3;
+    --line:#322A3D; --line-strong:#40364E;
+    --accent:#B49AF7; --accent-soft:#2A2136; --accent-ink:#E1D5FB; --accent-line:#4B3E60;
+    --ok:#5BD9A0; --ok-soft:#17281F;
+    --warn:#F0C069; --warn-soft:#2B2416;
+    --mono-bg:#1E1826;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    background:var(--paper); color:var(--ink);
+    font-family:"Source Serif 4", Georgia, "Times New Roman", serif;
+    font-size:17px; line-height:1.65; margin:0;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{ background:var(--accent-soft); color:var(--accent-ink); }
+  a{ color:var(--accent-ink); text-decoration-color:var(--accent-line); }
+  a:hover{ text-decoration-color:currentColor; }
+  a:focus-visible, button:focus-visible, .toc a:focus-visible{
+    outline:2px solid var(--accent); outline-offset:2px; border-radius:2px;
+  }
+  h1,h2,h3,h4{ font-family:"Archivo","Helvetica Neue",Arial,sans-serif; color:var(--ink); text-wrap:balance; line-height:1.2; margin:0; }
+  .mono{ font-family:"IBM Plex Mono", ui-monospace, SFMono-Regular, monospace; }
+
+  .shell{ display:flex; max-width:1180px; margin:0 auto; }
+  .toc{
+    position:sticky; top:0; align-self:flex-start; height:100vh;
+    width:252px; flex:0 0 252px; padding:40px 20px 40px 32px;
+    overflow-y:auto; border-right:1px solid var(--line);
+  }
+  .toc-brand{ font-family:"Archivo",sans-serif; font-weight:800; font-size:13px; letter-spacing:.06em; text-transform:uppercase; color:var(--accent-ink); margin-bottom:4px; }
+  .toc-doc{ font-size:12px; color:var(--mute); margin-bottom:22px; }
+  .toc nav{ display:flex; flex-direction:column; gap:2px; }
+  .toc a{ display:block; font-family:"IBM Plex Mono",monospace; font-size:12.5px; color:var(--ink-soft); text-decoration:none; padding:5px 10px; border-radius:5px; border-left:2px solid transparent; }
+  .toc a.lvl2{ padding-left:22px; font-size:12px; color:var(--mute); }
+  .toc a:hover{ background:var(--paper-raised); color:var(--ink); }
+  .toc a.active{ background:var(--accent-soft); color:var(--accent-ink); border-left-color:var(--accent); font-weight:500; }
+  .toc-foot{ margin-top:28px; padding-top:16px; border-top:1px solid var(--line); font-size:11.5px; color:var(--mute); }
+  .toc-toggle{ display:none; }
+  main{ flex:1 1 auto; min-width:0; padding:56px 64px 120px; max-width:880px; }
+
+  header.doc-head{ margin-bottom:56px; }
+  .kicker{ font-family:"IBM Plex Mono",monospace; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--accent-ink); background:var(--accent-soft); display:inline-block; padding:4px 10px; border-radius:4px; margin-bottom:18px; }
+  h1.title{ font-size:clamp(30px,4vw,42px); font-weight:800; margin-bottom:10px; }
+  .subtitle{ font-size:17px; color:var(--ink-soft); font-family:"Source Serif 4",serif; font-style:italic; max-width:60ch; }
+  .meta-row{ display:flex; flex-wrap:wrap; gap:28px; margin-top:28px; padding-top:24px; border-top:1px solid var(--line); }
+  .meta-item .meta-label{ font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.07em; text-transform:uppercase; color:var(--mute); margin-bottom:3px; }
+  .meta-item .meta-val{ font-size:14.5px; color:var(--ink); }
+  .xref{ margin-top:16px; font-size:13.5px; color:var(--mute); }
+  .xref a{ font-family:"IBM Plex Mono",monospace; font-size:12.5px; }
+
+  section.doc-section{ margin-top:64px; scroll-margin-top:24px; }
+  section.doc-section > .sec-num{ font-family:"IBM Plex Mono",monospace; color:var(--accent); font-size:14px; font-weight:500; }
+  h2.sec-title{ font-size:25px; font-weight:700; margin-top:6px; padding-bottom:14px; border-bottom:1px solid var(--line); }
+  h3.sub-title{ font-size:19px; font-weight:700; margin-top:36px; margin-bottom:14px; }
+  h3.sub-title .sec-num{ font-family:"IBM Plex Mono",monospace; color:var(--mute); font-weight:500; font-size:15px; margin-right:8px; }
+
+  p{ margin:14px 0; max-width:68ch; }
+  ul,ol{ margin:14px 0; padding-left:22px; max-width:66ch; }
+  li{ margin:6px 0; }
+  strong{ color:var(--ink); font-weight:600; }
+
+  .callout{ background:var(--paper-raised); border-left:3px solid var(--accent); border-radius:0 8px 8px 0; padding:16px 20px; margin:22px 0; max-width:66ch; }
+  .callout p{ margin:0; font-size:15.5px; color:var(--ink-soft); }
+
+  /* ---- pipeline diagram ---- */
+  .pipeline{ display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin:28px 0 8px; }
+  .pipe-stage{ background:var(--paper-raised); border:1px solid var(--line); border-radius:10px; padding:16px 16px 14px; position:relative; }
+  .pipe-num{ font-family:"IBM Plex Mono",monospace; font-size:11px; color:var(--accent-ink); background:var(--accent-soft); padding:2px 7px; border-radius:4px; display:inline-block; margin-bottom:8px; }
+  .pipe-stage h4{ font-size:15px; font-weight:700; margin-bottom:6px; }
+  .pipe-stage p{ font-size:12.8px; color:var(--mute); margin:0; max-width:none; line-height:1.5; }
+  .pipe-arrow{ display:none; }
+  @media (min-width:640px){
+    .pipe-stage:not(:last-child)::after{
+      content:"→"; position:absolute; right:-16px; top:50%; transform:translateY(-50%);
+      color:var(--accent-line); font-size:16px; z-index:1;
+    }
+  }
+  @media (max-width:720px){ .pipeline{ grid-template-columns:1fr; } .pipe-stage:not(:last-child)::after{ content:"↓"; right:auto; left:16px; top:auto; bottom:-18px; } }
+
+  .gate{
+    display:flex; align-items:center; gap:10px; margin:18px 0; padding:12px 16px;
+    background:var(--paper-sunk); border:1px dashed var(--line-strong); border-radius:8px; font-size:14px; max-width:66ch;
+  }
+  .gate .g-label{ font-family:"IBM Plex Mono",monospace; font-size:11px; color:var(--warn); background:var(--warn-soft); padding:2px 8px; border-radius:4px; white-space:nowrap; }
+  .gate p{ margin:0; font-size:14px; color:var(--ink-soft); }
+
+  /* component card */
+  .component{ border:1px solid var(--line); border-radius:10px; padding:20px 22px; margin:18px 0; background:var(--paper); }
+  .component h4{ font-size:17px; font-weight:700; margin-bottom:4px; }
+  .component .comp-tag{ font-family:"IBM Plex Mono",monospace; font-size:11px; color:var(--accent-ink); text-transform:uppercase; letter-spacing:.05em; }
+  .component ul{ margin:10px 0 0; }
+  .component li{ font-size:15px; color:var(--ink-soft); }
+  .component li strong{ color:var(--ink); }
+
+  /* tech stack grid */
+  .stack-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:14px; margin:20px 0; }
+  .stack-card{ border:1px solid var(--line); border-radius:10px; padding:16px 18px; background:var(--paper-raised); }
+  .stack-card .s-layer{ font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.05em; text-transform:uppercase; color:var(--mute); margin-bottom:6px; }
+  .stack-card .s-choice{ font-size:15.5px; font-weight:600; color:var(--ink); margin-bottom:6px; }
+  .stack-card .s-note{ font-size:13px; color:var(--mute); line-height:1.5; }
+
+  .table-wrap{ overflow-x:auto; margin:20px 0; border:1px solid var(--line); border-radius:8px; }
+  table{ border-collapse:collapse; width:100%; min-width:520px; font-size:14.5px; }
+  th,td{ text-align:left; padding:10px 14px; border-bottom:1px solid var(--line); vertical-align:top; }
+  thead th{ font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.05em; text-transform:uppercase; color:var(--mute); background:var(--paper-sunk); font-weight:500; }
+  tbody tr:last-child td{ border-bottom:none; }
+  td.mono, th.mono{ font-family:"IBM Plex Mono",monospace; font-size:13px; }
+
+  /* sequence flow (vertical) */
+  .flow{ margin:24px 0; padding-left:2px; }
+  .flow-step{ display:flex; gap:16px; position:relative; padding-bottom:22px; }
+  .flow-step:last-child{ padding-bottom:0; }
+  .flow-dot{ flex:0 0 auto; width:10px; height:10px; border-radius:50%; background:var(--accent); margin-top:6px; position:relative; z-index:1; }
+  .flow-step:not(:last-child)::before{ content:""; position:absolute; left:4.5px; top:16px; bottom:0; width:1px; background:var(--line-strong); }
+  .flow-text{ font-size:14.5px; color:var(--ink-soft); }
+  .flow-text strong{ color:var(--ink); font-family:"IBM Plex Mono",monospace; font-weight:500; font-size:13.5px; }
+
+  footer.doc-foot{ margin-top:80px; padding-top:24px; border-top:1px solid var(--line); font-size:13px; color:var(--mute); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; }
+
+  @media (max-width: 880px){
+    .shell{ display:block; }
+    .toc{ position:sticky; top:0; z-index:20; height:auto; width:auto; border-right:none; border-bottom:1px solid var(--line); background:var(--paper); padding:14px 20px; }
+    .toc nav{ display:none; max-height:60vh; overflow-y:auto; margin-top:14px; }
+    .toc.open nav{ display:flex; }
+    .toc-head-row{ display:flex; align-items:center; justify-content:space-between; }
+    .toc-toggle{ display:inline-flex; font-family:"IBM Plex Mono",monospace; font-size:12px; color:var(--accent-ink); background:var(--accent-soft); border:none; padding:6px 10px; border-radius:6px; cursor:pointer; }
+    .toc-foot{ display:none; }
+    main{ padding:36px 22px 90px; }
+    .pipeline{ grid-template-columns:1fr; }
+  }
+</style>
+
+<div class="shell">
+  <aside class="toc" id="toc">
+    <div class="toc-head-row">
+      <div>
+        <div class="toc-brand">Meta Agent</div>
+        <div class="toc-doc">Design Doc · BusinessIntelligence.ai</div>
+      </div>
+      <button class="toc-toggle" id="tocToggle">Contents</button>
+    </div>
+    <nav id="tocNav">
+      <a href="#d1" class="lvl1">1. Introduction &amp; Goals</a>
+      <a href="#d2" class="lvl1">2. Architecture Overview</a>
+      <a href="#d3" class="lvl1">3. Component Design</a>
+      <a href="#d3-1" class="lvl2">3.1 Ingestion Layer</a>
+      <a href="#d3-2" class="lvl2">3.2 Noise Filtering</a>
+      <a href="#d3-3" class="lvl2">3.3 Root-Cause Engine</a>
+      <a href="#d3-4" class="lvl2">3.4 Recommendation Engine</a>
+      <a href="#d4" class="lvl1">4. End-to-End Data Flow</a>
+      <a href="#d5" class="lvl1">5. Data Model</a>
+      <a href="#d6" class="lvl1">6. Technology Stack</a>
+      <a href="#d7" class="lvl1">7. Deployment Architecture</a>
+      <a href="#d8" class="lvl1">8. Security &amp; Governance</a>
+      <a href="#d9" class="lvl1">9. Scalability &amp; Failure Handling</a>
+      <a href="#d10" class="lvl1">10. Future Enhancements</a>
+    </nav>
+    <div class="toc-foot">Accenture Innovation Challenge 2026<br>Rev. 1.0 · 25 Aug 2026</div>
+  </aside>
+
+  <main>
+    <header class="doc-head">
+      <span class="kicker">System Design Document</span>
+      <h1 class="title">BusinessIntelligence.ai</h1>
+      <p class="subtitle">The technical architecture behind the four-stage pipeline: how ingestion, statistical filtering, causal validation, and grounded generation fit together as services.</p>
+      <div class="meta-row">
+        <div class="meta-item"><div class="meta-label">Document</div><div class="meta-val">Design Doc · Rev. 1.0</div></div>
+        <div class="meta-item"><div class="meta-label">Date</div><div class="meta-val">25 August 2026</div></div>
+        <div class="meta-item"><div class="meta-label">Team</div><div class="meta-val">Meta Agent</div></div>
+        <div class="meta-item"><div class="meta-label">Authors</div><div class="meta-val">S. Gangwar (Lead), M. Sagar, S. A. Patro</div></div>
+      </div>
+      <div class="xref">Companion document: <a href="#">Software Requirements Specification, Rev. 1.0</a> — every component below realizes a numbered FR from that spec.</div>
+    </header>
+
+    <section class="doc-section" id="d1">
+      <span class="sec-num">§1</span>
+      <h2 class="sec-title">Introduction &amp; Goals</h2>
+      <p>This document translates the SRS into a concrete system design. Four design goals drive every decision below:</p>
+      <ul>
+        <li><strong>Correctness</strong> — a cause is never asserted without converging structured and unstructured evidence.</li>
+        <li><strong>Trust</strong> — every claim in a report is traceable back to the evidence that produced it.</li>
+        <li><strong>Speed</strong> — an incident goes from raw signal to routed report in minutes.</li>
+        <li><strong>Extensibility</strong> — new data sources and playbooks can be added without touching the core pipeline.</li>
+      </ul>
+    </section>
+
+    <section class="doc-section" id="d2">
+      <span class="sec-num">§2</span>
+      <h2 class="sec-title">Architecture Overview</h2>
+      <p>The system is a four-stage, event-driven pipeline. Each stage is an independently deployable service that consumes an event, does one job, and either emits the next event or halts the pipeline with a reason. A central metadata store records every decision — including suppressed and ambiguous cases — so the full evidence trail behind any report, or any silence, can be audited.</p>
+
+      <div class="pipeline">
+        <div class="pipe-stage">
+          <span class="pipe-num">Stage 1</span>
+          <h4>Data Ingestion</h4>
+          <p>Structured connectors (CRM, ERP, ticketing, finance, HR) + unstructured connectors (notes, tickets, surveys, reports) write into a unified Observation Store.</p>
+        </div>
+        <div class="pipe-stage">
+          <span class="pipe-num">Stage 2</span>
+          <h4>Noise Filtering</h4>
+          <p>Data-quality checks, STL decomposition, and sample-size-scaled significance testing separate real anomalies from normal variation.</p>
+        </div>
+        <div class="pipe-stage">
+          <span class="pipe-num">Stage 3</span>
+          <h4>Root-Cause Engine</h4>
+          <p>Segments the anomaly, mines structured and unstructured evidence in parallel, and requires both to converge before naming a cause.</p>
+        </div>
+        <div class="pipe-stage">
+          <span class="pipe-num">Stage 4</span>
+          <h4>Recommendation</h4>
+          <p>Matches the cause to a playbook, generates a grounded narrative, and routes the finished report to the owning department.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="doc-section" id="d3">
+      <span class="sec-num">§3</span>
+      <h2 class="sec-title">Component Design</h2>
+
+      <h3 class="sub-title" id="d3-1"><span class="sec-num">3.1</span>Data Ingestion Layer</h3>
+      <div class="component">
+        <span class="comp-tag">Realizes FR-1.1 – FR-1.4</span>
+        <h4>Ingestion Layer</h4>
+        <ul>
+          <li><strong>Structured connectors</strong> pull from CRM, ERP, ticketing, finance, and HR — via API where available, else a change-data-capture replica so the source system is never queried live.</li>
+          <li><strong>Unstructured connectors</strong> pull call notes, emails, ticket text, surveys, and reports into a document store, then chunk and embed them.</li>
+          <li><strong>Entity &amp; time alignment</strong> resolves each record to a canonical account / region / product entity and a normalized timestamp.</li>
+          <li>Output: a unified <strong>Observation Store</strong> — a structured metrics table plus an indexed unstructured evidence store.</li>
+        </ul>
+      </div>
+
+      <h3 class="sub-title" id="d3-2"><span class="sec-num">3.2</span>Noise Filtering Engine</h3>
+      <div class="component">
+        <span class="comp-tag">Realizes FR-2.1 – FR-2.5</span>
+        <h4>Noise Filtering Engine</h4>
+        <ul>
+          <li><strong>Data-quality module</strong> — schema/sync validation, duplicate detection, and definition-change detection via schema diffing against the last known-good state.</li>
+          <li><strong>STL decomposition module</strong> — per-KPI trend / seasonal / residual decomposition.</li>
+          <li><strong>Significance-check module</strong> — a sample-size-scaled confidence interval test on the residual.</li>
+        </ul>
+      </div>
+      <div class="gate"><span class="g-label">Gate</span><p>Below threshold → logged to the Suppressed-Report Store, pipeline halts. Above threshold → a <strong>Confirmed Anomaly</strong> event is emitted to Stage 3.</p></div>
+
+      <h3 class="sub-title" id="d3-3"><span class="sec-num">3.3</span>Root-Cause Engine</h3>
+      <div class="component">
+        <span class="comp-tag">Realizes FR-3.1 – FR-3.6</span>
+        <h4>Root-Cause Engine</h4>
+        <ul>
+          <li><strong>Segmentation module</strong> — slices the anomaly along region / product / account / channel, ranked by contribution to the deviation.</li>
+          <li><strong>Structured correlator</strong> — searches the Observation Store for other metrics co-moving within the anomaly's time window.</li>
+          <li><strong>Unstructured theme miner</strong> — NLP clustering over the evidence index, scoped to the same window and segment, extracting dominant themes with excerpt citations.</li>
+          <li><strong>Convergence check</strong> — a cause is only <em>validated</em> if a structured signal and an unstructured theme align in timing and direction.</li>
+        </ul>
+      </div>
+      <div class="gate"><span class="g-label">Gate</span><p>Converges → cause passes to Stage 4 as <strong>Validated Cause</strong>. Does not converge → <strong>Ambiguous Case Handler</strong> ranks surviving hypotheses and computes the specific missing evidence — the "disambiguation gap" — that would resolve each.</p></div>
+
+      <h3 class="sub-title" id="d3-4"><span class="sec-num">3.4</span>Recommendation Engine</h3>
+      <div class="component">
+        <span class="comp-tag">Realizes FR-4.1 – FR-4.5</span>
+        <h4>Recommendation Engine</h4>
+        <ul>
+          <li><strong>Playbook matcher</strong> — maps the validated cause (or top hypothesis) to a vetted playbook via a rules-plus-embedding lookup against the Playbook Library.</li>
+          <li><strong>Narrative generator</strong> — an LLM call constrained to the retrieved evidence set only, with a citation required per claim; an anti-hallucination guard rejects or flags any ungrounded sentence.</li>
+          <li><strong>Synthesis &amp; packaging</strong> — assembles Problem + Cause + Confidence + Action into the department report format.</li>
+          <li><strong>Intelligent router</strong> — dispatches to the owning department's channel based on a segment-ownership mapping.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="doc-section" id="d4">
+      <span class="sec-num">§4</span>
+      <h2 class="sec-title">End-to-End Data Flow</h2>
+      <div class="flow">
+        <div class="flow-step"><div class="flow-dot"></div><div class="flow-text"><strong>TRIGGER</strong> — scheduled sync or on-demand check fires for a monitored KPI.</div></div>
+        <div class="flow-step"><div class="flow-dot"></div><div class="flow-text"><strong>INGEST</strong> — structured + unstructured sources write into the Observation Store.</div></div>
+        <div class="flow-step"><div class="flow-dot"></div><div class="flow-text"><strong>DQ CHECK → STL → SIGNIFICANCE</strong> — noise is filtered; non-significant deviations are suppressed and logged.</div></div>
+        <div class="flow-step"><div class="flow-dot"></div><div class="flow-text"><strong>SEGMENT → PARALLEL MINING</strong> — the confirmed anomaly is sliced and evidence is gathered from both structured and unstructured sources at once.</div></div>
+        <div class="flow-step"><div class="flow-dot"></div><div class="flow-text"><strong>CONVERGENCE CHECK</strong> — validated cause, or routed to the Ambiguous Case Handler.</div></div>
+        <div class="flow-step"><div class="flow-dot"></div><div class="flow-text"><strong>PLAYBOOK MATCH → NARRATIVE GENERATION</strong> — the cause is mapped to an action and phrased as a grounded report.</div></div>
+        <div class="flow-step"><div class="flow-dot"></div><div class="flow-text"><strong>PACKAGE → ROUTE</strong> — the report is dispatched to the owning department's channel.</div></div>
+      </div>
+    </section>
+
+    <section class="doc-section" id="d5">
+      <span class="sec-num">§5</span>
+      <h2 class="sec-title">Data Model</h2>
+      <p>Conceptual entities shared across all four stages:</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th class="mono">Entity</th><th>Key fields</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">Metric</td><td>id, name, department, unit</td></tr>
+          <tr><td class="mono">Observation</td><td>metric_id, entity, segment_dims, timestamp, value</td></tr>
+          <tr><td class="mono">Anomaly</td><td>id, metric_id, window, magnitude, significance_score, status</td></tr>
+          <tr><td class="mono">Segment</td><td>anomaly_id, dimension, value, contribution_score</td></tr>
+          <tr><td class="mono">Evidence</td><td>id, anomaly_id, type (structured / unstructured), source, excerpt / metric_ref, timing_offset</td></tr>
+          <tr><td class="mono">Hypothesis</td><td>id, anomaly_id, cause_label, confidence, supporting_evidence[], disambiguation_gap</td></tr>
+          <tr><td class="mono">Playbook</td><td>id, cause_category, recommended_actions[], owner_department</td></tr>
+          <tr><td class="mono">Report</td><td>id, anomaly_id, hypothesis_id, narrative, status, routed_to, created_at</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="doc-section" id="d6">
+      <span class="sec-num">§6</span>
+      <h2 class="sec-title">Technology Stack (proposed)</h2>
+      <div class="stack-grid">
+        <div class="stack-card"><div class="s-layer">Orchestration</div><div class="s-choice">Prefect / Airflow</div><div class="s-note">Pipeline scheduling and per-stage checkpointing; Debezium for CDC where a live API isn't available.</div></div>
+        <div class="stack-card"><div class="s-layer">Structured analytics</div><div class="s-choice">Python · pandas · statsmodels</div><div class="s-note">STL decomposition and confidence-interval testing.</div></div>
+        <div class="stack-card"><div class="s-layer">NLP / unstructured</div><div class="s-choice">Sentence-transformers · BERTopic</div><div class="s-note">Embeddings for retrieval; topic modelling for theme mining.</div></div>
+        <div class="stack-card"><div class="s-layer">Narrative generation</div><div class="s-choice">Claude, retrieval-grounded</div><div class="s-note">Citation-required prompting plus a rule-based grounding check on the output.</div></div>
+        <div class="stack-card"><div class="s-layer">Storage</div><div class="s-choice">PostgreSQL · pgvector · object store</div><div class="s-note">Structured metrics and metadata, embeddings, and raw documents respectively.</div></div>
+        <div class="stack-card"><div class="s-layer">API layer</div><div class="s-choice">FastAPI</div><div class="s-note">Internal service-to-service and dashboard-facing endpoints.</div></div>
+        <div class="stack-card"><div class="s-layer">Frontend</div><div class="s-choice">React</div><div class="s-note">Report review UI, admin console, playbook editor.</div></div>
+        <div class="stack-card"><div class="s-layer">Delivery</div><div class="s-choice">Email · Slack · Teams</div><div class="s-note">Outbound connectors for Intelligent Routing.</div></div>
+      </div>
+    </section>
+
+    <section class="doc-section" id="d7">
+      <span class="sec-num">§7</span>
+      <h2 class="sec-title">Deployment Architecture</h2>
+      <p>Each pipeline stage runs as a containerized service on Kubernetes and scales independently — Stage 2's statistical checks are cheap and frequent, Stage 3's evidence mining is heavier and bursty. A message queue (Kafka or SQS) decouples stages so a slow downstream service never blocks ingestion. Secrets and connector credentials are held in a vault service; structured logs and pipeline metrics feed an observability dashboard — the same discipline the product itself applies to its clients' KPIs.</p>
+    </section>
+
+    <section class="doc-section" id="d8">
+      <span class="sec-num">§8</span>
+      <h2 class="sec-title">Security &amp; Governance</h2>
+      <ul>
+        <li>Role-based access control on source connectors, the suppressed-log, and finished reports</li>
+        <li>Encryption in transit (TLS) and at rest for all stores</li>
+        <li>A PII-redaction pass on unstructured text before it enters the evidence index</li>
+        <li>Version-controlled playbooks and generation prompts, both with change history</li>
+        <li>Full evidence lineage retained per report — every claim resolves back to its source record</li>
+      </ul>
+    </section>
+
+    <section class="doc-section" id="d9">
+      <span class="sec-num">§9</span>
+      <h2 class="sec-title">Scalability &amp; Failure Handling</h2>
+      <ul>
+        <li>KPIs are evaluated in parallel, partitioned by metric so one slow segment never delays another</li>
+        <li>The suppressed-log is capped and retention-windowed rather than growing unbounded</li>
+        <li>Each stage checkpoints its state so a retry resumes rather than restarts the pipeline</li>
+        <li>The convergence check <strong>fails closed</strong>: on any doubt, the system reports ambiguity rather than fabricating a single cause</li>
+      </ul>
+    </section>
+
+    <section class="doc-section" id="d10">
+      <span class="sec-num">§10</span>
+      <h2 class="sec-title">Future Enhancements</h2>
+      <ul>
+        <li>Feed analyst annotations back into playbook matching so the system improves with use</li>
+        <li>Move from scheduled to streaming anomaly detection for time-sensitive KPIs</li>
+        <li>Auto-draft new playbooks from recurring clusters of ambiguous cases</li>
+      </ul>
+    </section>
+
+    <footer class="doc-foot">
+      <span>BusinessIntelligence.ai — Design Document Rev. 1.0</span>
+      <span>Team Meta Agent · Accenture Innovation Challenge 2026</span>
+    </footer>
+  </main>
+</div>
+
+<script>
+  (function(){
+    var toggle = document.getElementById('tocToggle');
+    var toc = document.getElementById('toc');
+    if(toggle){ toggle.addEventListener('click', function(){ toc.classList.toggle('open'); }); }
+
+    var links = Array.prototype.slice.call(document.querySelectorAll('.toc a'));
+    var sections = links.map(function(l){ return document.querySelector(l.getAttribute('href')); }).filter(Boolean);
+    if('IntersectionObserver' in window && sections.length){
+      var map = {};
+      links.forEach(function(l, i){ if(sections[i]) map[sections[i].id] = l; });
+      var obs = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+          var link = map[e.target.id];
+          if(!link) return;
+          if(e.isIntersecting){
+            links.forEach(function(l){ l.classList.remove('active'); });
+            link.classList.add('active');
+          }
+        });
+      }, { rootMargin: '-10% 0px -70% 0px', threshold: 0 });
+      sections.forEach(function(s){ obs.observe(s); });
+    }
+  })();
+</script>

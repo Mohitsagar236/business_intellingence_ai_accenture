@@ -1,0 +1,62 @@
+.evidence-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.evidence-timeline-row {
+  display: grid;
+  grid-template-columns: 160px 1fr 150px;
+  align-items: center;
+  gap: 12px;
+}
+
+.evidence-timeline-label {
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+a.evidence-timeline-link {
+  color: var(--accent-ink);
+  text-decoration: none;
+}
+
+a.evidence-timeline-link:hover {
+  text-decoration: underline;
+}
+
+.evidence-timeline-track {
+  position: relative;
+  height: 14px;
+  background: var(--paper-sunk);
+  border-radius: 999px;
+}
+
+.evidence-timeline-bar {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  border-radius: 999px;
+  min-width: 6px;
+}
+
+.bar-anomaly {
+  background: var(--warn);
+}
+
+.bar-structured {
+  background: var(--accent);
+}
+
+.bar-unstructured {
+  background: var(--accent-line);
+}
+
+.evidence-timeline-dates {
+  font-size: 10.5px;
+  color: var(--mute);
+  text-align: right;
+}

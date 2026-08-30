@@ -1,0 +1,448 @@
+<title>BusinessIntelligence.ai SRS</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --paper:#FAF9FC; --paper-raised:#F1EDF7; --paper-sunk:#EFEAF6;
+    --ink:#1C1524; --ink-soft:#4A4152; --mute:#6B6478;
+    --line:#E1DCEA; --line-strong:#CFC7DE;
+    --accent:#6D28D9; --accent-soft:#EDE6FB; --accent-ink:#4C1D95; --accent-line:#C9B8F0;
+    --ok:#1F7A57; --ok-soft:#E4F3EC;
+    --warn:#966009; --warn-soft:#F7ECD8;
+    --mono-bg:#F4F1F9;
+    --shadow: 0 1px 2px rgba(28,21,36,.06), 0 8px 24px -12px rgba(28,21,36,.12);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#17121D; --paper-raised:#1E1826; --paper-sunk:#1A1520;
+      --ink:#EDE8F5; --ink-soft:#C6BFD6; --mute:#948AA3;
+      --line:#322A3D; --line-strong:#40364E;
+      --accent:#B49AF7; --accent-soft:#2A2136; --accent-ink:#E1D5FB; --accent-line:#4B3E60;
+      --ok:#5BD9A0; --ok-soft:#17281F;
+      --warn:#F0C069; --warn-soft:#2B2416;
+      --mono-bg:#1E1826;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#17121D; --paper-raised:#1E1826; --paper-sunk:#1A1520;
+    --ink:#EDE8F5; --ink-soft:#C6BFD6; --mute:#948AA3;
+    --line:#322A3D; --line-strong:#40364E;
+    --accent:#B49AF7; --accent-soft:#2A2136; --accent-ink:#E1D5FB; --accent-line:#4B3E60;
+    --ok:#5BD9A0; --ok-soft:#17281F;
+    --warn:#F0C069; --warn-soft:#2B2416;
+    --mono-bg:#1E1826;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    background:var(--paper); color:var(--ink);
+    font-family:"Source Serif 4", Georgia, "Times New Roman", serif;
+    font-size:17px; line-height:1.65; margin:0;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{ background:var(--accent-soft); color:var(--accent-ink); }
+
+  a{ color:var(--accent-ink); text-decoration-color:var(--accent-line); }
+  a:hover{ text-decoration-color:currentColor; }
+  a:focus-visible, button:focus-visible, .toc a:focus-visible{
+    outline:2px solid var(--accent); outline-offset:2px; border-radius:2px;
+  }
+
+  h1,h2,h3,h4{
+    font-family:"Archivo", "Helvetica Neue", Arial, sans-serif;
+    color:var(--ink); text-wrap:balance; line-height:1.2; margin:0;
+  }
+
+  .mono{ font-family:"IBM Plex Mono", ui-monospace, SFMono-Regular, monospace; }
+
+  /* ---- shell ---- */
+  .shell{ display:flex; max-width:1180px; margin:0 auto; }
+  .toc{
+    position:sticky; top:0; align-self:flex-start; height:100vh;
+    width:252px; flex:0 0 252px; padding:40px 20px 40px 32px;
+    overflow-y:auto; border-right:1px solid var(--line);
+  }
+  .toc-brand{
+    font-family:"Archivo",sans-serif; font-weight:800; font-size:13px;
+    letter-spacing:.06em; text-transform:uppercase; color:var(--accent-ink);
+    margin-bottom:4px;
+  }
+  .toc-doc{ font-size:12px; color:var(--mute); margin-bottom:22px; }
+  .toc nav{ display:flex; flex-direction:column; gap:2px; }
+  .toc a{
+    display:block; font-family:"IBM Plex Mono",monospace; font-size:12.5px;
+    color:var(--ink-soft); text-decoration:none; padding:5px 10px;
+    border-radius:5px; border-left:2px solid transparent;
+  }
+  .toc a.lvl2{ padding-left:22px; font-size:12px; color:var(--mute); }
+  .toc a:hover{ background:var(--paper-raised); color:var(--ink); }
+  .toc a.active{
+    background:var(--accent-soft); color:var(--accent-ink); border-left-color:var(--accent);
+    font-weight:500;
+  }
+  .toc-foot{ margin-top:28px; padding-top:16px; border-top:1px solid var(--line); font-size:11.5px; color:var(--mute); }
+
+  .toc-toggle{ display:none; }
+
+  main{ flex:1 1 auto; min-width:0; padding:56px 64px 120px; max-width:840px; }
+
+  header.doc-head{ margin-bottom:56px; }
+  .kicker{
+    font-family:"IBM Plex Mono",monospace; font-size:12px; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--accent-ink); background:var(--accent-soft);
+    display:inline-block; padding:4px 10px; border-radius:4px; margin-bottom:18px;
+  }
+  h1.title{ font-size:clamp(30px,4vw,42px); font-weight:800; margin-bottom:10px; }
+  .subtitle{ font-size:17px; color:var(--ink-soft); font-family:"Source Serif 4",serif; font-style:italic; max-width:56ch; }
+  .meta-row{
+    display:flex; flex-wrap:wrap; gap:28px; margin-top:28px; padding-top:24px;
+    border-top:1px solid var(--line);
+  }
+  .meta-item .meta-label{ font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.07em; text-transform:uppercase; color:var(--mute); margin-bottom:3px; }
+  .meta-item .meta-val{ font-size:14.5px; color:var(--ink); }
+
+  section.doc-section{ margin-top:64px; scroll-margin-top:24px; }
+  section.doc-section > .sec-num{
+    font-family:"IBM Plex Mono",monospace; color:var(--accent); font-size:14px; font-weight:500;
+  }
+  h2.sec-title{ font-size:25px; font-weight:700; margin-top:6px; padding-bottom:14px; border-bottom:1px solid var(--line); }
+  h3.sub-title{ font-size:19px; font-weight:700; margin-top:36px; margin-bottom:14px; color:var(--ink); }
+  h3.sub-title .sec-num{ font-family:"IBM Plex Mono",monospace; color:var(--mute); font-weight:500; font-size:15px; margin-right:8px; }
+
+  p{ margin:14px 0; max-width:66ch; }
+  ul,ol{ margin:14px 0; padding-left:22px; max-width:64ch; }
+  li{ margin:6px 0; }
+  strong{ color:var(--ink); font-weight:600; }
+
+  .callout{
+    background:var(--paper-raised); border-left:3px solid var(--accent);
+    border-radius:0 8px 8px 0; padding:16px 20px; margin:22px 0; max-width:64ch;
+  }
+  .callout p{ margin:0; font-size:15.5px; color:var(--ink-soft); }
+
+  /* requirement cards */
+  .req{
+    display:grid; grid-template-columns:auto auto 1fr; align-items:start; column-gap:14px; row-gap:6px;
+    padding:14px 16px; margin:12px 0; background:var(--paper-raised);
+    border:1px solid var(--line); border-radius:8px;
+  }
+  .req-id{
+    font-family:"IBM Plex Mono",monospace; font-size:13px; font-weight:500; color:var(--accent-ink);
+    background:var(--accent-soft); padding:2px 8px; border-radius:4px; white-space:nowrap; align-self:center;
+  }
+  .pill{
+    font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.05em; text-transform:uppercase;
+    padding:3px 9px; border-radius:99px; white-space:nowrap; align-self:center; border:1px solid transparent;
+  }
+  .pill-must{ background:var(--accent); color:#fff; }
+  :root[data-theme="dark"] .pill-must{ color:#1C1524; }
+  @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]) .pill-must{ color:#1C1524; } }
+  .pill-should{ border-color:var(--accent-line); color:var(--accent-ink); }
+  .pill-could{ border-color:var(--line-strong); color:var(--mute); }
+  .req-body{ grid-column:1 / -1; font-size:15px; color:var(--ink-soft); margin:2px 0 0; max-width:62ch; }
+  .req-body strong{ color:var(--ink); }
+
+  /* tables */
+  .table-wrap{ overflow-x:auto; margin:20px 0; border:1px solid var(--line); border-radius:8px; }
+  table{ border-collapse:collapse; width:100%; min-width:520px; font-size:14.5px; }
+  th,td{ text-align:left; padding:10px 14px; border-bottom:1px solid var(--line); vertical-align:top; }
+  thead th{
+    font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.05em; text-transform:uppercase;
+    color:var(--mute); background:var(--paper-sunk); font-weight:500;
+  }
+  tbody tr:last-child td{ border-bottom:none; }
+  td.mono, th.mono{ font-family:"IBM Plex Mono",monospace; font-size:13px; }
+
+  .usecase{
+    padding:18px 20px; margin:16px 0; border:1px solid var(--line); border-radius:8px; background:var(--paper);
+  }
+  .usecase .uc-id{ font-family:"IBM Plex Mono",monospace; font-size:12px; color:var(--accent-ink); font-weight:500; }
+  .usecase h4{ font-size:16px; font-weight:700; margin:4px 0 8px; }
+  .usecase p{ margin:0; font-size:15px; color:var(--ink-soft); }
+
+  footer.doc-foot{
+    margin-top:80px; padding-top:24px; border-top:1px solid var(--line);
+    font-size:13px; color:var(--mute); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;
+  }
+
+  @media (max-width: 880px){
+    .shell{ display:block; }
+    .toc{
+      position:sticky; top:0; z-index:20; height:auto; width:auto; border-right:none;
+      border-bottom:1px solid var(--line); background:var(--paper); padding:14px 20px;
+    }
+    .toc nav{ display:none; max-height:60vh; overflow-y:auto; margin-top:14px; }
+    .toc.open nav{ display:flex; }
+    .toc-head-row{ display:flex; align-items:center; justify-content:space-between; }
+    .toc-toggle{
+      display:inline-flex; font-family:"IBM Plex Mono",monospace; font-size:12px; color:var(--accent-ink);
+      background:var(--accent-soft); border:none; padding:6px 10px; border-radius:6px; cursor:pointer;
+    }
+    .toc-foot{ display:none; }
+    main{ padding:36px 22px 90px; }
+  }
+</style>
+
+<div class="shell">
+  <aside class="toc" id="toc">
+    <div class="toc-head-row">
+      <div>
+        <div class="toc-brand">Meta Agent</div>
+        <div class="toc-doc">SRS · BusinessIntelligence.ai</div>
+      </div>
+      <button class="toc-toggle" id="tocToggle">Contents</button>
+    </div>
+    <nav id="tocNav">
+      <a href="#s1" class="lvl1">1. Introduction</a>
+      <a href="#s2" class="lvl1">2. Overall Description</a>
+      <a href="#s3" class="lvl1">3. Functional Requirements</a>
+      <a href="#s3-1" class="lvl2">3.1 Data Ingestion</a>
+      <a href="#s3-2" class="lvl2">3.2 Noise Filtering</a>
+      <a href="#s3-3" class="lvl2">3.3 Root-Cause Analysis</a>
+      <a href="#s3-4" class="lvl2">3.4 Recommendation</a>
+      <a href="#s4" class="lvl1">4. External Interfaces</a>
+      <a href="#s5" class="lvl1">5. Non-Functional Reqs</a>
+      <a href="#s6" class="lvl1">6. Other Requirements</a>
+      <a href="#s7" class="lvl1">Appendix A — Use Cases</a>
+      <a href="#s8" class="lvl1">Appendix B — Traceability</a>
+    </nav>
+    <div class="toc-foot">
+      Accenture Innovation Challenge 2026<br>Rev. 1.0 · 25 Aug 2026
+    </div>
+  </aside>
+
+  <main>
+    <header class="doc-head">
+      <span class="kicker">Software Requirements Specification</span>
+      <h1 class="title">BusinessIntelligence.ai</h1>
+      <p class="subtitle">From “what changed” to “why” to “what to do” — a KPI storytelling engine that replaces days of manual cross-referencing with a grounded, evidence-cited diagnosis in minutes.</p>
+      <div class="meta-row">
+        <div class="meta-item"><div class="meta-label">Document</div><div class="meta-val">SRS · Rev. 1.0</div></div>
+        <div class="meta-item"><div class="meta-label">Date</div><div class="meta-val">25 August 2026</div></div>
+        <div class="meta-item"><div class="meta-label">Team</div><div class="meta-val">Meta Agent</div></div>
+        <div class="meta-item"><div class="meta-label">Authors</div><div class="meta-val">S. Gangwar (Lead), M. Sagar, S. A. Patro</div></div>
+        <div class="meta-item"><div class="meta-label">Programme</div><div class="meta-val">Accenture Innovation Challenge 2026</div></div>
+      </div>
+    </header>
+
+    <section class="doc-section" id="s1">
+      <span class="sec-num">§1</span>
+      <h2 class="sec-title">Introduction</h2>
+
+      <h3 class="sub-title"><span class="sec-num">1.1</span>Purpose</h3>
+      <p>This Software Requirements Specification defines the functional and non-functional requirements for <strong>BusinessIntelligence.ai</strong>, a KPI storytelling and root-cause diagnosis engine. It is written for the development team, evaluators, and stakeholders of the Accenture Innovation Challenge 2026, and is intended to be precise enough to design and test against.</p>
+
+      <h3 class="sub-title"><span class="sec-num">1.2</span>Scope</h3>
+      <p>The system ingests structured and unstructured data from department systems, isolates statistically significant KPI anomalies from normal variation, determines the most probable root cause by requiring structured and unstructured evidence to converge, and produces a grounded, department-ready diagnosis and recommended action. Where the evidence does not converge, the system reports the ambiguity honestly rather than fabricating confidence.</p>
+      <div class="callout"><p><strong>Out of scope for v1:</strong> autonomous execution of recommended actions, sub-minute real-time alerting, and data sources beyond CRM, ERP, ticketing, finance, and HR systems.</p></div>
+
+      <h3 class="sub-title"><span class="sec-num">1.3</span>Definitions &amp; Acronyms</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th class="mono">Term</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">KPI</td><td>Key Performance Indicator</td></tr>
+          <tr><td class="mono">STL</td><td>Seasonal-Trend decomposition using Loess</td></tr>
+          <tr><td class="mono">NLP</td><td>Natural Language Processing</td></tr>
+          <tr><td class="mono">CI</td><td>Confidence Interval</td></tr>
+          <tr><td class="mono">RCA</td><td>Root-Cause Analysis</td></tr>
+          <tr><td class="mono">FR / NFR</td><td>Functional / Non-Functional Requirement</td></tr>
+          <tr><td class="mono">LLM</td><td>Large Language Model</td></tr>
+        </tbody>
+      </table></div>
+
+      <h3 class="sub-title"><span class="sec-num">1.4</span>References</h3>
+      <p>Accenture Innovation Challenge 2026 pitch deck, <em>“AI reinvention made real”</em> — Team Meta Agent, BusinessIntelligence.ai concept, 2026.</p>
+
+      <h3 class="sub-title"><span class="sec-num">1.5</span>Document Overview</h3>
+      <p>§2 describes the product at a high level. §3 enumerates functional requirements by pipeline stage. §4 covers external interfaces. §5 covers non-functional requirements. §6 lists remaining requirements. The appendices give representative use cases and a requirement traceability matrix.</p>
+    </section>
+
+    <section class="doc-section" id="s2">
+      <span class="sec-num">§2</span>
+      <h2 class="sec-title">Overall Description</h2>
+
+      <h3 class="sub-title"><span class="sec-num">2.1</span>Product Perspective</h3>
+      <p>BusinessIntelligence.ai is a new analytical layer sitting between an organization's systems of record and the analysts who currently perform root-cause analysis by hand. It reads from those systems and writes a structured report back to the responsible department — it does not replace or modify the source systems.</p>
+
+      <h3 class="sub-title"><span class="sec-num">2.2</span>Product Functions</h3>
+      <ul>
+        <li>Ingest structured and unstructured data on a scheduled or triggered basis</li>
+        <li>Filter statistical noise from genuine anomalies</li>
+        <li>Segment anomalies and mine structured and unstructured evidence in parallel</li>
+        <li>Validate convergence of evidence before naming a cause</li>
+        <li>Handle ambiguous cases transparently, with ranked hypotheses</li>
+        <li>Match validated causes to playbooks and generate a grounded report</li>
+        <li>Route the finished report to the responsible department</li>
+      </ul>
+
+      <h3 class="sub-title"><span class="sec-num">2.3</span>User Classes &amp; Characteristics</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>User class</th><th>Needs</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Business Analyst</strong></td><td>Evidence and confidence behind a finding, not just a verdict</td></tr>
+          <tr><td><strong>Department Head / Ops Lead</strong></td><td>An action, delivered to the right channel, not a data dump</td></tr>
+          <tr><td><strong>Data / IT Administrator</strong></td><td>Control over source connectors, access, and the suppressed-report log</td></tr>
+          <tr><td><strong>Executive Sponsor</strong></td><td>Periodic aggregate view of what fired, what didn't, and outcomes</td></tr>
+        </tbody>
+      </table></div>
+
+      <h3 class="sub-title"><span class="sec-num">2.4</span>Operating Environment</h3>
+      <p>Cloud-hosted service with a browser-based reporting UI. Integration with client systems via API, webhook, or replicated read access. Report delivery via email, Slack, Teams, or in-app dashboard.</p>
+
+      <h3 class="sub-title"><span class="sec-num">2.5</span>Design &amp; Implementation Constraints</h3>
+      <ul>
+        <li>Every asserted cause must be traceable to specific evidence — a structured metric and an unstructured excerpt</li>
+        <li>No recommendation may be issued without passing both the significance check and the convergence check</li>
+        <li>LLM narrative generation is retrieval-grounded: it may phrase findings, never invent them</li>
+      </ul>
+
+      <h3 class="sub-title"><span class="sec-num">2.6</span>Assumptions &amp; Dependencies</h3>
+      <ul>
+        <li>Source systems expose queryable APIs or replicated read access</li>
+        <li>At least one full seasonal cycle of historical data (e.g. 12 months) is available for baseline modelling</li>
+        <li>Organizational playbooks exist, or can be authored, per cause category</li>
+      </ul>
+    </section>
+
+    <section class="doc-section" id="s3">
+      <span class="sec-num">§3</span>
+      <h2 class="sec-title">Functional Requirements</h2>
+      <p>Each requirement carries a priority under MoSCoW: <span class="pill pill-must" style="margin:0 2px;">Must</span> is required for v1, <span class="pill pill-should" style="margin:0 2px;">Should</span> is expected but deferrable, <span class="pill pill-could" style="margin:0 2px;">Could</span> is a stretch goal.</p>
+
+      <h3 class="sub-title" id="s3-1"><span class="sec-num">3.1</span>Data Ingestion</h3>
+      <div class="req"><span class="req-id">FR-1.1</span><span class="pill pill-must">Must</span><p class="req-body">The system <strong>shall</strong> connect to structured data sources: CRM, ERP, ticketing, finance, and HR systems.</p></div>
+      <div class="req"><span class="req-id">FR-1.2</span><span class="pill pill-must">Must</span><p class="req-body">The system <strong>shall</strong> ingest unstructured sources: call notes, tickets, surveys, and reports.</p></div>
+      <div class="req"><span class="req-id">FR-1.3</span><span class="pill pill-should">Should</span><p class="req-body">The system <strong>should</strong> normalize and timestamp-align all sources to a common entity and time key.</p></div>
+      <div class="req"><span class="req-id">FR-1.4</span><span class="pill pill-could">Could</span><p class="req-body">The system <strong>could</strong> support both scheduled and on-demand / triggered ingestion.</p></div>
+
+      <h3 class="sub-title" id="s3-2"><span class="sec-num">3.2</span>Noise Filtering</h3>
+      <div class="req"><span class="req-id">FR-2.1</span><span class="pill pill-must">Must</span><p class="req-body">The system <strong>shall</strong> run data-quality checks — sync errors, duplicates, definition changes — before any analysis proceeds.</p></div>
+      <div class="req"><span class="req-id">FR-2.2</span><span class="pill pill-must">Must</span><p class="req-body">The system <strong>shall</strong> decompose each monitored KPI's time series via STL into trend, seasonal, and residual components.</p></div>
+      <div class="req"><span class="req-id">FR-2.3</span><span class="pill pill-must">Must</span><p class="req-body">The system <strong>shall</strong> apply sample-size-scaled confidence intervals to judge whether a residual deviation is statistically significant.</p></div>
+      <div class="req"><span class="req-id">FR-2.4</span><span class="pill pill-must">Must</span><p class="req-body">The system <strong>shall</strong> suppress and silently log any non-significant deviation — no report is issued for it.</p></div>
+      <div class="req"><span class="req-id">FR-2.5</span><span class="pill pill-should">Should</span><p class="req-body">The system <strong>should</strong> expose the suppressed-report log to administrators for trust auditing.</p></div>
+
+      <h3 class="sub-title" id="s3-3"><span class="sec-num">3.3</span>Root-Cause Analysis</h3>
+      <div class="req"><span class="req-id">FR-3.1</span><span class="pill pill-must">Must</span><p class="req-body">The system <strong>shall</strong> segment a confirmed anomaly by region, product, account, and channel.</p></div>
+      <div class="req"><span class="req-id">FR-3.2</span><span class="pill pill-must">Must</span><p class="req-body">The system <strong>shall</strong> correlate co-moving structured metrics within the anomaly's time window.</p></div>
+      <div class="req"><span class="req-id">FR-3.3</span><span class="pill pill-must">Must</span><p class="req-body">The system <strong>shall</strong> mine unstructured text for themes via NLP clustering, scoped to the same window and segment.</p></div>
+      <div class="req"><span class="req-id">FR-3.4</span><span class="pill pill-must">Must</span><p class="req-body">The system <strong>shall</strong> run a convergence check requiring structured and unstructured evidence to align in both timing and direction before naming a single cause.</p></div>
+      <div class="req"><span class="req-id">FR-3.5</span><span class="pill pill-must">Must</span><p class="req-body">Where no single cause converges, the system <strong>shall</strong> invoke the Ambiguous Case Handler rather than assert a cause.</p></div>
+      <div class="req"><span class="req-id">FR-3.6</span><span class="pill pill-must">Must</span><p class="req-body">The Ambiguous Case Handler <strong>shall</strong> present ranked hypotheses with relative confidence, and name the specific evidence gap that would disambiguate each.</p></div>
+
+      <h3 class="sub-title" id="s3-4"><span class="sec-num">3.4</span>Recommendation &amp; Reporting</h3>
+      <div class="req"><span class="req-id">FR-4.1</span><span class="pill pill-must">Must</span><p class="req-body">The system <strong>shall</strong> map a validated root cause to a predefined, vetted playbook.</p></div>
+      <div class="req"><span class="req-id">FR-4.2</span><span class="pill pill-must">Must</span><p class="req-body">The system <strong>shall</strong> generate a natural-language report — Problem, Cause, Confidence, Action — strictly grounded in validated evidence.</p></div>
+      <div class="req"><span class="req-id">FR-4.3</span><span class="pill pill-must">Must</span><p class="req-body">The system <strong>shall</strong> flag or reject any generated statement that is not traceable to retrieved evidence (anti-hallucination guard).</p></div>
+      <div class="req"><span class="req-id">FR-4.4</span><span class="pill pill-should">Should</span><p class="req-body">The system <strong>should</strong> automatically route the finished report to the owning department's channel.</p></div>
+      <div class="req"><span class="req-id">FR-4.5</span><span class="pill pill-could">Could</span><p class="req-body">The system <strong>could</strong> let analysts annotate a report to improve future playbook matching.</p></div>
+    </section>
+
+    <section class="doc-section" id="s4">
+      <span class="sec-num">§4</span>
+      <h2 class="sec-title">External Interface Requirements</h2>
+
+      <h3 class="sub-title"><span class="sec-num">4.1</span>User Interfaces</h3>
+      <p>A web dashboard for report review; an admin console for source connectors and the suppressed-report audit log; a no-code playbook editor.</p>
+
+      <h3 class="sub-title"><span class="sec-num">4.2</span>Software Interfaces</h3>
+      <p>CRM (e.g. Salesforce), ERP, ticketing (e.g. Zendesk, ServiceNow), finance systems, HRIS, an LLM inference API, and an NLP / embedding service.</p>
+
+      <h3 class="sub-title"><span class="sec-num">4.3</span>Communication Interfaces</h3>
+      <p>Inbound REST and webhook APIs; outbound email, Slack, and Teams delivery; HTTPS/TLS throughout.</p>
+    </section>
+
+    <section class="doc-section" id="s5">
+      <span class="sec-num">§5</span>
+      <h2 class="sec-title">Non-Functional Requirements</h2>
+      <div class="table-wrap"><table>
+        <thead><tr><th class="mono" style="width:80px;">ID</th><th>Requirement</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">NFR-1</td><td><strong>Performance</strong> — end-to-end diagnosis completes within minutes per incident, not days.</td></tr>
+          <tr><td class="mono">NFR-2</td><td><strong>Trustworthiness</strong> — the system never asserts a cause without meeting the convergence threshold; genuine ambiguity is surfaced, never hidden.</td></tr>
+          <tr><td class="mono">NFR-3</td><td><strong>Security &amp; privacy</strong> — encryption in transit and at rest; role-based access to connectors and reports; PII-aware handling of call-note and survey text.</td></tr>
+          <tr><td class="mono">NFR-4</td><td><strong>Scalability</strong> — concurrent anomaly evaluation across many KPIs and segments without cross-contamination.</td></tr>
+          <tr><td class="mono">NFR-5</td><td><strong>Usability</strong> — reports are readable by a non-technical department lead: Problem, Cause, Confidence, Action, in that order.</td></tr>
+          <tr><td class="mono">NFR-6</td><td><strong>Auditability</strong> — every report retains a link to its underlying structured and unstructured evidence.</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="doc-section" id="s6">
+      <span class="sec-num">§6</span>
+      <h2 class="sec-title">Other Requirements</h2>
+      <ul>
+        <li>Compliance with client data-residency and retention policy</li>
+        <li>Suppressed-log data retained for a configurable audit window</li>
+        <li>Playbooks are version-controlled with a visible change history</li>
+      </ul>
+    </section>
+
+    <section class="doc-section" id="s7">
+      <span class="sec-num">Appendix A</span>
+      <h2 class="sec-title">Representative Use Cases</h2>
+
+      <div class="usecase">
+        <span class="uc-id">UC-1</span>
+        <h4>Regional revenue drop, routed to Sales Ops</h4>
+        <p>A regional revenue KPI breaches its confidence interval. Segmentation isolates the region; correlated billing-system errors and a spike in “payment failed” ticket themes converge in timing. A grounded report is generated and routed to Sales Ops within minutes.</p>
+      </div>
+      <div class="usecase">
+        <span class="uc-id">UC-2</span>
+        <h4>Ambiguous CSAT decline</h4>
+        <p>Support CSAT drops significantly, but staffing-shortfall and product-regression hypotheses both partially fit. The Ambiguous Case Handler presents both, ranked, and names the missing agent-headcount log that would resolve the ambiguity.</p>
+      </div>
+      <div class="usecase">
+        <span class="uc-id">UC-3</span>
+        <h4>Data-quality issue silently suppressed</h4>
+        <p>A metric dip traces back to a finance-system definition change rather than a real event. The system suppresses the report entirely and logs the cause silently, preserving trust in future alerts.</p>
+      </div>
+    </section>
+
+    <section class="doc-section" id="s8">
+      <span class="sec-num">Appendix B</span>
+      <h2 class="sec-title">Requirement Traceability Matrix</h2>
+      <div class="table-wrap"><table>
+        <thead><tr><th class="mono">Requirement</th><th>Pipeline stage</th><th>Related NFR</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">FR-1.1 – FR-1.4</td><td>Data Ingestion</td><td class="mono">NFR-3</td></tr>
+          <tr><td class="mono">FR-2.1 – FR-2.5</td><td>Noise Filtering</td><td class="mono">NFR-2, NFR-6</td></tr>
+          <tr><td class="mono">FR-3.1 – FR-3.6</td><td>Root-Cause Analysis</td><td class="mono">NFR-2, NFR-4</td></tr>
+          <tr><td class="mono">FR-4.1 – FR-4.5</td><td>Recommendation &amp; Reporting</td><td class="mono">NFR-1, NFR-5, NFR-6</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <footer class="doc-foot">
+      <span>BusinessIntelligence.ai — SRS Rev. 1.0</span>
+      <span>Team Meta Agent · Accenture Innovation Challenge 2026</span>
+    </footer>
+  </main>
+</div>
+
+<script>
+  (function(){
+    var toggle = document.getElementById('tocToggle');
+    var toc = document.getElementById('toc');
+    if(toggle){ toggle.addEventListener('click', function(){ toc.classList.toggle('open'); }); }
+
+    var links = Array.prototype.slice.call(document.querySelectorAll('.toc a'));
+    var sections = links.map(function(l){ return document.querySelector(l.getAttribute('href')); }).filter(Boolean);
+    if('IntersectionObserver' in window && sections.length){
+      var map = {};
+      links.forEach(function(l, i){ if(sections[i]) map[sections[i].id] = l; });
+      var obs = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+          var link = map[e.target.id];
+          if(!link) return;
+          if(e.isIntersecting){
+            links.forEach(function(l){ l.classList.remove('active'); });
+            link.classList.add('active');
+          }
+        });
+      }, { rootMargin: '-10% 0px -70% 0px', threshold: 0 });
+      sections.forEach(function(s){ obs.observe(s); });
+    }
+  })();
+</script>

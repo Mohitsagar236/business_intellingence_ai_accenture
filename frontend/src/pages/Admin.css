@@ -1,0 +1,193 @@
+.admin-section {
+  margin-bottom: 40px;
+}
+
+.admin-section h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+
+.admin-section h2 svg {
+  color: var(--accent);
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 640px;
+  font-size: 13.5px;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+
+thead th {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--mute);
+  background: var(--paper-sunk);
+  font-weight: 500;
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.detail-cell {
+  color: var(--ink-soft);
+  max-width: 46ch;
+}
+
+.reason-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10.5px;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.playbook-card {
+  transition: border-color 0.15s var(--ease);
+}
+
+.playbook-card:hover {
+  border-color: var(--line-strong);
+}
+
+.reason-data_quality {
+  background: var(--crit-soft);
+  color: var(--crit);
+}
+
+.reason-not_significant {
+  background: var(--paper-sunk);
+  color: var(--mute);
+}
+
+.playbook-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.playbook-card {
+  padding: 18px 20px;
+}
+
+.playbook-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.playbook-category {
+  font-size: 11px;
+  color: var(--accent-ink);
+  background: var(--accent-soft);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.playbook-owner {
+  font-size: 11.5px;
+  color: var(--mute);
+}
+
+.playbook-card h3 {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.playbook-card ol {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.playbook-card li {
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin: 5px 0;
+  line-height: 1.5;
+}
+
+.audit-filters {
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.audit-filters label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-family: "Archivo", sans-serif;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+.audit-filters input,
+.audit-filters select {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 13px;
+  padding: 7px 9px;
+  border-radius: 7px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.audit-filters input:focus-visible,
+.audit-filters select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.audit-detail-note {
+  color: var(--mute);
+}
+
+.audit-result {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.audit-result-ok {
+  background: var(--ok-soft);
+  color: var(--ok);
+}
+
+.audit-result-fail {
+  background: var(--crit-soft);
+  color: var(--crit);
+}

@@ -1,0 +1,348 @@
+:root {
+  --paper: #faf9fc;
+  --paper-raised: #f1edf7;
+  --paper-sunk: #efeaf6;
+  --ink: #1c1524;
+  --ink-soft: #4a4152;
+  --mute: #6b6478;
+  --line: #e1dcea;
+  --line-strong: #cfc7de;
+  --accent: #6d28d9;
+  --accent-soft: #ede6fb;
+  --accent-ink: #4c1d95;
+  --accent-line: #c9b8f0;
+  --accent-contrast: #ffffff; /* text/icon color placed on top of a solid --accent fill */
+
+  --ok: #1f7a57;
+  --ok-soft: #e4f3ec;
+  --warn: #966009;
+  --warn-soft: #f7ecd8;
+  --crit: #b3273e;
+  --crit-soft: #fbe7ea;
+
+  --shadow-sm: 0 1px 2px rgba(28, 21, 36, 0.05);
+  --shadow: 0 1px 2px rgba(28, 21, 36, 0.06), 0 8px 24px -12px rgba(28, 21, 36, 0.14);
+  --shadow-lg: 0 4px 10px rgba(28, 21, 36, 0.08), 0 16px 36px -14px rgba(28, 21, 36, 0.22);
+  --radius: 10px;
+  --radius-sm: 7px;
+  --ease: cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #17121d;
+    --paper-raised: #1e1826;
+    --paper-sunk: #1a1520;
+    --ink: #ede8f5;
+    --ink-soft: #c6bfd6;
+    --mute: #948aa3;
+    --line: #322a3d;
+    --line-strong: #40364e;
+    --accent: #b49af7;
+    --accent-soft: #2a2136;
+    --accent-ink: #e1d5fb;
+    --accent-line: #4b3e60;
+    --accent-contrast: #1c1524; /* dark mode's accent is light-toned, so text on it must be dark */
+
+    --ok: #5bd9a0;
+    --ok-soft: #17281f;
+    --warn: #f0c069;
+    --warn-soft: #2b2416;
+    --crit: #f0707e;
+    --crit-soft: #2b1a1e;
+
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.24);
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px -12px rgba(0, 0, 0, 0.5);
+    --shadow-lg: 0 4px 14px rgba(0, 0, 0, 0.32), 0 20px 44px -16px rgba(0, 0, 0, 0.6);
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Source Serif 4", Georgia, "Times New Roman", serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--accent-ink);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  color: var(--ink);
+  margin: 0;
+}
+
+.mono {
+  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+button {
+  font-family: inherit;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+::selection {
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ---- shared page chrome ---- */
+.page-head {
+  margin-bottom: 32px;
+  max-width: 68ch;
+}
+
+.kicker {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 11.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-ink);
+  background: var(--accent-soft);
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: 5px;
+  margin-bottom: 12px;
+}
+
+.page-head h1 {
+  font-size: clamp(24px, 3vw, 30px);
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.page-sub {
+  font-size: 15px;
+  color: var(--ink-soft);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.state-msg {
+  padding: 14px 18px;
+  border-radius: 8px;
+  background: var(--paper-raised);
+  color: var(--mute);
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.state-error {
+  background: var(--crit-soft);
+  color: var(--crit);
+}
+
+.card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.18s var(--ease), border-color 0.18s var(--ease), transform 0.18s var(--ease);
+}
+
+/* Applied to cards that are themselves a click target (a whole row/card wrapped in <Link>) —
+   not every .card, since static content cards (the report body, evidence panels) shouldn't
+   look interactive. */
+.card-hover {
+  cursor: pointer;
+}
+
+.card-hover:hover {
+  border-color: var(--line-strong);
+  box-shadow: var(--shadow);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  font-family: "Archivo", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  padding: 7px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.15s var(--ease), background 0.15s var(--ease), border-color 0.15s var(--ease);
+}
+
+.btn-secondary:hover {
+  color: var(--ink);
+  border-color: var(--line-strong);
+  background: var(--paper-sunk);
+}
+
+.btn-secondary.active {
+  color: var(--accent-ink);
+  background: var(--accent-soft);
+  border-color: var(--accent-line);
+}
+
+.btn-run,
+.btn-secondary {
+  line-height: 1.2;
+}
+
+.btn-run svg,
+.btn-secondary svg {
+  flex: none;
+}
+
+/* Canonical primary-action button — defined once, globally loaded, so every page (each its
+   own lazy-loaded chunk) renders it identically instead of racing separate per-page copies. */
+.btn-run {
+  font-family: "Archivo", sans-serif;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--accent-contrast);
+  background: var(--accent);
+  border: none;
+  padding: 7px 13px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.15s var(--ease), transform 0.1s var(--ease), box-shadow 0.15s var(--ease);
+}
+
+.btn-run:hover:not(:disabled) {
+  background: var(--accent-ink);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.btn-run:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.btn-run:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.btn-run-lg {
+  padding: 9px 16px;
+  font-size: 13.5px;
+}
+
+/* Shared breadcrumb-style "back to X" link — used on any detail page. Defined here (not in a
+   per-page stylesheet) because each page is its own lazy-loaded chunk. */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: "Archivo", sans-serif;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--mute);
+  text-decoration: none;
+  margin-bottom: 18px;
+  transition: color 0.15s var(--ease);
+}
+
+.back-link:hover {
+  color: var(--accent-ink);
+}
+
+/* Shared "metric identity" block (department label + linked name) — used on the Dashboard's
+   KpiCard and the Data page's MetricRow. Defined here, not in either page's own stylesheet,
+   for the same cross-chunk reason as .btn-run/.back-link above. */
+.kpi-dept {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--mute);
+  margin-bottom: 5px;
+}
+
+.kpi-dept svg {
+  opacity: 0.85;
+}
+
+.kpi-name {
+  display: block;
+  font-family: "Archivo", sans-serif;
+  font-weight: 700;
+  font-size: 16.5px;
+  color: var(--ink);
+  text-decoration: none;
+  transition: color 0.15s var(--ease);
+}
+
+.kpi-name:hover {
+  color: var(--accent-ink);
+}
+
+/* ---- loading skeletons ---- */
+@keyframes skeleton-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.skeleton {
+  background: var(--paper-sunk);
+  border-radius: 6px;
+  animation: skeleton-pulse 1.4s ease-in-out infinite;
+}
+
+.run-feedback {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 11px;
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+
+.run-feedback-ok {
+  color: var(--mute);
+  background: var(--paper-sunk);
+}
+
+.run-feedback-error {
+  color: var(--crit);
+  background: var(--crit-soft);
+}

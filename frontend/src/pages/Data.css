@@ -1,0 +1,150 @@
+.create-metric-form {
+  padding: 22px 24px;
+  margin-bottom: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.create-metric-form h3 {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.create-metric-form h3 svg,
+.text-evidence-card h3 svg {
+  color: var(--accent);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.form-grid label,
+.data-page label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-family: "Archivo", sans-serif;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+.form-grid label.span-2 {
+  grid-column: 1 / -1;
+}
+
+.field-hint {
+  font-weight: 400;
+  color: var(--mute);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.data-page input[type="text"],
+.data-page input[type="number"],
+.data-page input:not([type]),
+.data-page select {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 13.5px;
+  padding: 8px 10px;
+  border-radius: 7px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.data-page input:focus-visible,
+.data-page select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.metrics-section {
+  margin-bottom: 40px;
+}
+
+.metrics-section h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+
+.metrics-section h2 svg {
+  color: var(--accent);
+}
+
+.metric-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.metric-row {
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.metric-row-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.metric-row-meta {
+  font-size: 12px;
+  color: var(--mute);
+}
+
+.metric-row-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.file-btn {
+  position: relative;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+}
+
+.file-btn input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+  width: 100%;
+}
+
+.text-evidence-card {
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.text-evidence-card h3 {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.btn-danger:hover {
+  color: var(--crit);
+  background: var(--crit-soft);
+  border-color: transparent;
+}

@@ -1,0 +1,56 @@
+.ts-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ts-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-end;
+}
+
+.ts-toggle-label {
+  font-size: 11.5px;
+  color: var(--mute);
+  margin-right: 2px;
+}
+
+.ts-legend {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  font-size: 11.5px;
+  color: var(--mute);
+}
+
+.ts-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ts-swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  flex: none;
+}
+
+.ts-swatch-actual {
+  background: var(--accent);
+}
+
+.ts-swatch-baseline {
+  background: var(--ink-soft);
+}
+
+.ts-swatch-ci {
+  background: var(--line-strong);
+}
+
+.ts-swatch-anomaly {
+  background: var(--warn);
+}

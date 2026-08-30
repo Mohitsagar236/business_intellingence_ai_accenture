@@ -1,0 +1,39 @@
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.empty-dashboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 64px 24px;
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius);
+  color: var(--mute);
+  text-align: center;
+}
+
+.empty-dashboard svg {
+  color: var(--accent-line);
+  margin-bottom: 4px;
+}
+
+.empty-dashboard h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.empty-dashboard p {
+  margin: 0;
+  font-size: 14px;
+  max-width: 40ch;
+}
+
+.empty-dashboard .btn-run {
+  margin-top: 8px;
+  text-decoration: none;
+}

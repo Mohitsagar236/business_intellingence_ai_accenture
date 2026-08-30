@@ -1,0 +1,91 @@
+.dept-filter {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.report-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.report-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 18px;
+  text-decoration: none;
+  color: var(--ink);
+}
+
+.report-row-skeleton {
+  padding: 16px 18px;
+}
+
+.report-row-chevron {
+  color: var(--line-strong);
+  flex: none;
+  transition: transform 0.15s var(--ease), color 0.15s var(--ease);
+}
+
+.report-row:hover .report-row-chevron {
+  color: var(--accent);
+  transform: translateX(2px);
+}
+
+.empty-block-inline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 18px;
+  border-radius: var(--radius);
+  background: var(--paper-raised);
+  color: var(--mute);
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.empty-block-inline svg {
+  color: var(--line-strong);
+  flex: none;
+}
+
+.report-row-main {
+  min-width: 0;
+}
+
+.report-row-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.report-row-metric {
+  font-family: "Archivo", sans-serif;
+  font-weight: 700;
+  font-size: 14.5px;
+}
+
+.report-row-problem {
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--mute);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 60ch;
+}
+
+.report-row-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  font-size: 11.5px;
+  color: var(--mute);
+  flex-shrink: 0;
+}

@@ -1,0 +1,4 @@
+# Kaggle's terms generally don't allow redistributing raw dataset files — keep this out of
+# any git history. Only the small processed CSVs (already aggregated, no PII) are safe to keep.
+raw/*
+!raw/.gitkeep

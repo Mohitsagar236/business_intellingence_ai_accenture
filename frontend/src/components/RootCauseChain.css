@@ -1,0 +1,190 @@
+.root-cause-chain {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 4px 4px;
+}
+
+.chain-arrow {
+  width: 2px;
+  height: 22px;
+  background: var(--line-strong);
+}
+
+.chain-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  min-width: 200px;
+  max-width: 340px;
+}
+
+.chain-node-title {
+  font-family: "Archivo", sans-serif;
+  font-weight: 700;
+  font-size: 13.5px;
+  color: var(--ink);
+}
+
+.chain-node-detail {
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+
+.chain-node-icon {
+  color: var(--accent-ink);
+  margin-bottom: 2px;
+}
+
+a.chain-node {
+  text-decoration: none;
+  cursor: pointer;
+  transition: border-color 0.15s var(--ease), box-shadow 0.15s var(--ease), transform 0.15s var(--ease);
+}
+
+a.chain-node:hover {
+  border-color: var(--accent-line);
+  box-shadow: var(--shadow);
+  transform: translateY(-1px);
+}
+
+.chain-node-empty {
+  opacity: 0.6;
+}
+
+.chain-node-empty .chain-node-icon {
+  color: var(--mute);
+}
+
+.chain-node-validated {
+  background: var(--ok-soft);
+  border-color: var(--ok);
+}
+
+.chain-node-suppressed {
+  flex-direction: row;
+  gap: 8px;
+  color: var(--mute);
+  max-width: 420px;
+}
+
+.chain-node-suppressed svg {
+  flex: none;
+  margin-top: 2px;
+}
+
+.chain-node-branch-label {
+  flex-direction: row;
+  gap: 10px;
+  max-width: 460px;
+}
+
+/* the converging pair: two nodes side by side under one entry line, merging into one exit
+   line — drawn with plain borders rather than SVG, cheap and theme-aware for free */
+.chain-converge {
+  position: relative;
+  display: flex;
+  gap: 28px;
+  padding-top: 22px;
+  margin-top: 0;
+}
+
+.chain-converge::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 2px;
+  height: 0;
+}
+
+.chain-converge > .chain-node {
+  position: relative;
+}
+
+.chain-converge > .chain-node::before {
+  content: "";
+  position: absolute;
+  top: -22px;
+  left: 50%;
+  width: 2px;
+  height: 22px;
+  background: var(--line-strong);
+}
+
+.chain-converge::after {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: calc(25% + 14px);
+  right: calc(25% + 14px);
+  height: 2px;
+  background: var(--line-strong);
+}
+
+.chain-branches {
+  display: flex;
+  gap: 22px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 22px;
+  position: relative;
+}
+
+.chain-branches::before {
+  content: "";
+  position: absolute;
+  top: -22px;
+  left: 50%;
+  width: 2px;
+  height: 22px;
+  background: var(--line-strong);
+}
+
+.chain-branch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  position: relative;
+  padding-top: 22px;
+}
+
+.chain-branch::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 2px;
+  height: 22px;
+  background: var(--line-strong);
+}
+
+.chain-node-candidate {
+  border-color: var(--warn);
+  background: var(--warn-soft);
+}
+
+.chain-branch-evidence {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.chain-branch-evidence .chain-node {
+  min-width: 0;
+  width: 100%;
+}
+
+.chain-node-gap {
+  background: transparent;
+  border-style: dashed;
+}
